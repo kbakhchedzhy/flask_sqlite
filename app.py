@@ -48,24 +48,24 @@ def update_list():
     """
     try:
         id_of_post = request.args['id']
-        title = request.args.get('title')
-        description = request.args.get('text')
-        connection = sqlite3.connect('blog.sqlite')
-        cursor = connection.cursor()
-        if not title:
-            values = (description, id_of_post)
-            cursor.execute("UPDATE posts SET description = ? WHERE id = ?;", values)
-        elif not description:
-            values = (title, id_of_post)
-            cursor.execute("UPDATE posts SET title = ? WHERE id = ?;", values)
-        else:
-            values = (title, description, id_of_post)
-            cursor.execute("UPDATE posts SET title = ?, description = ? WHERE id = ?;", values)
-        connection.commit()
-        connection.close()
-        return redirect('/')
     except KeyError:
         return '<h3>Ошибка. Введите id.</h3>'
+    title = request.args.get('title')
+    description = request.args.get('text')
+    connection = sqlite3.connect('blog.sqlite')
+    cursor = connection.cursor()
+    if not title:
+        values = (description, id_of_post)
+        cursor.execute("UPDATE posts SET description = ? WHERE id = ?;", values)
+    elif not description:
+        values = (title, id_of_post)
+        cursor.execute("UPDATE posts SET title = ? WHERE id = ?;", values)
+    else:
+        values = (title, description, id_of_post)
+        cursor.execute("UPDATE posts SET title = ?, description = ? WHERE id = ?;", values)
+    connection.commit()
+    connection.close()
+    return redirect('/')
 
 
 @app.route('/delete')
@@ -76,14 +76,14 @@ def delete_post():
     """
     try:
         id_of_post = request.args['id']
-        connection = sqlite3.connect('blog.sqlite')
-        cursor = connection.cursor()
-        cursor.execute("DELETE FROM posts WHERE id = ?;", id_of_post)
-        connection.commit()
-        connection.close()
-        return redirect('/')
     except KeyError:
         return '<h3>Ошибка. Введите id.</h3>'
+    connection = sqlite3.connect('blog.sqlite')
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM posts WHERE id = ?;", id_of_post)
+    connection.commit()
+    connection.close()
+    return redirect('/')
 
 
 if __name__ == '__main__':
